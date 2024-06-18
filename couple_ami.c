@@ -1,15 +1,15 @@
 #include <stdio.h>
 int sommeDiviseurs(int num)
 {
-    int somme = 0;
-    for (int i = 1; i <= num / 2; i++)
+    int sommeDiv = 0;
+    for (int a = 1; a <= num / 2; a++)
     {
-        if (num % i == 0)
+        if (num % a == 0)
         {
-            somme += i;
+            sommeDiv += a;
         }
     }
-    return somme;
+    return sommeDiv;
 }
 
 int main()
@@ -21,15 +21,18 @@ int main()
 
     printf("Les couples de nombres amis jusqu'a %d sont :\n", n);
 
-    for (int a = 220; a <= n; a++)
-    {
-        int b = sommeDiviseurs(a);
-
-        if (b > a && b <= n && sommeDiviseurs(b) == b)
+    for (int i = 220; i < n; i++)
+        for (int j = 220; j < n; j++)
         {
-            printf("(%d, %d) sont des nombres amis\n", a, b);
-        }
-    }
+            {
+                int sommeA = sommeDiviseurs(i);
+                int sommeB = sommeDiviseurs(j);
 
+                if ((i != j) && (sommeA == j) && (sommeB == i))
+                {
+                    printf("(%d, %d) sont des nombres amis\n", i, j);
+                }
+            }
+        }
     return 0;
 }
