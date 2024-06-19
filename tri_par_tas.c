@@ -1,11 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
 #define MAX_SIZE 100
 
 int tab[MAX_SIZE];
-int n, m;
+int n = 0, m;
 
 void echange(int i1, int i2)
 {
@@ -15,12 +14,25 @@ void echange(int i1, int i2)
     tab[i2] = tmp;
 }
 
-void tabTrié()
+void tabTrie()
 {
     printf("Les éléments du tableau après tri sont : ");
     for (int i = 0; i < n; i++)
     {
         printf("%d ", tab[i]);
+    }
+    printf("\n");
+}
+
+int factorisation(int a, int b, char *params)
+{
+    if (strcmp(params, "Rmin") == 0)
+    {
+        return a < b;
+    }
+    else
+    {
+        return a > b;
     }
 }
 
@@ -29,19 +41,19 @@ int lecture()
     return tab[0];
 }
 
-void ajoutElement(int newElement)
+void ajoutElement(int newElement, char *params)
 {
-    int i = n - 1;
-    tab[n++] = newElement;
+    int i = n++;
+    tab[i] = newElement;
 
-    while ((i >= 0) && (tab[i] < tab[(i - 1) / 2]))
+    while (i > 0 && factorisation(tab[i], tab[(i - 1) / 2], params))
     {
         echange(i, (i - 1) / 2);
         i = (i - 1) / 2;
     }
 }
 
-void extraction()
+void extraction(char *params)
 {
     int i, k;
     echange(0, --n);
@@ -50,12 +62,12 @@ void extraction()
 
     while (k < n)
     {
-        if (((k + 1) < n) && (tab[k] > tab[k + 1]))
+        if (k + 1 < n && factorisation(tab[k + 1], tab[k], params))
         {
             k++;
         }
 
-        if (tab[k] > tab[i])
+        if (!factorisation(tab[k], tab[i], params))
         {
             break;
         }
@@ -67,25 +79,33 @@ void extraction()
 
 int main()
 {
-    int element, val;
+    int val;
+    char params[99];
 
     // ajout de la dimension du tableau
     printf("Entrez la dimension du tableau : ");
     scanf("%d", &m);
+    getchar(); // Vider le tampon pour le caractère '\n' laissé par scanf
 
-    printf("Entrez les éléments du tableau : ");
+    printf("Entrez Rmin ou Rmax : ");
+    fgets(params, sizeof(params), stdin);
+    params[strcspn(params, "\n")] = '\0'; // Supprimer le '\n' de la fin de params
+
+    printf("\n");
+
+    printf("Entrez les éléments du tableau :\n");
     for (int i = 0; i < m; i++)
     {
         printf("tab[%d] = ", i);
         scanf("%d", &val);
-        ajoutElement(val);
+        ajoutElement(val, params);
     }
 
     printf("\n");
 
     while (n > 0)
     {
-        extraction();
+        extraction(params);
     }
 
     printf("Les éléments du tableau après extraction de l'élément prioritaire : ");
@@ -93,6 +113,7 @@ int main()
     {
         printf("%d ", tab[j]);
     }
+    printf("\n");
 
     return 0;
 }

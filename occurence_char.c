@@ -2,34 +2,36 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define MAX_NUMBERS 10 // Nombre maximal de nombres dans la chaîne
+
 int main()
 {
-    char *input;
-    char *tab;
+    char input[] = "2 5 4 6"; // Chaîne à découper
+    int numbers[MAX_NUMBERS]; // Tableau pour stocker les nombres
+    int count = 0;            // Compteur pour le nombre de nombres trouvés
+    char *token;              // Pointeur pour parcourir les tokens
 
-    input = (char *)malloc(sizeof(char) * 100);
-    tab = (char *)malloc(sizeof(char) * 100);
+    // Utilisation de strtok pour découper la chaîne par les espaces
+    token = strtok(input, " ");
 
-    if (input == NULL)
+    // Parcourir tous les tokens trouvés
+    while (token != NULL)
     {
-        exit(1);
+        // Convertir le token en entier et l'ajouter au tableau
+        numbers[count] = atoi(token);
+
+        // Incrémenter le compteur et obtenir le prochain token
+        count++;
+        token = strtok(NULL, " ");
     }
 
-    printf("Entrez une phrase : ");
-    scanf("%99[^\n]", input);
-
-    printf("Vous avez saisi : %s\n", input);
-
-    for (int i = 0; i < strlen(input); i++)
+    // Afficher les nombres stockés dans le tableau
+    printf("Les nombres dans le tableau sont : ");
+    for (int i = 0; i < count; i++)
     {
-        while (input[i] != " ")
-        {
-            tab += input[i];
-        }
+        printf("%d ", numbers[i]);
     }
-
-    // libération de la mémoire
-    free(input);
+    printf("\n");
 
     return 0;
 }
